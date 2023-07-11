@@ -159,5 +159,29 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Ignore common compact file extensions
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.gz
+*.bz2
+*.xz
+*.lzma
+*.lzo
+*.z
+*.Z
+*.lz4
+*.lz
+*.lzh
+*.lha
+*.arj
+*.cab
+*.iso
+*.jar
+*.tar
+
 # Streamlit configuration folder
 .streamlit/
