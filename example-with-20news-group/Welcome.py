@@ -12,7 +12,7 @@ def load_model(model : str = 'en_core_web_sm'):
     nlp = None
     try:
         nlp = spacy.load(model)
-    except ModuleNotFoundError:
+    except IOError:
         print(f"downloading model {model} ...")
         spacy.cli.download(model)
         nlp = spacy.load(model)
@@ -45,6 +45,9 @@ def main():
 
     with default_visualizer:
         visualize_ner(doc, labels=nlp.get_pipe("ner").labels, show_table=False)
+
+    with custom_visualizer:
+        st.write("Not yet implemented!")
 
 
 
