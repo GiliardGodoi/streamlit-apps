@@ -1,11 +1,11 @@
 import random
 
-import sklearn as sk
 import spacy
 import spacy_streamlit
 import streamlit as st
 import re
 from spacy import displacy
+from sklearn.datasets import fetch_20newsgroups
 from spacy_streamlit import load_model
 from spacy_streamlit import visualize_ner
 
@@ -21,28 +21,28 @@ from spacy_streamlit import visualize_ner
     
 #     return nlp
 
-st.cache_data
-def load_text_data(dataset_name : str):
-    result = sk.datasets.fetch_20newsgroups()
-    return result['data']
+def load_text_data():
+    # it did not work well
+    # result = fetch_20newsgroups()
+    text = None
+    with open('70.txt', 'r', encoding='utf8') as f:
+        text = f.read()
+
+    return text
 
 
 
 def main():
+    st.title("Named Entity Recognition Example")
     nlp = load_model('en_core_web_sm')
-    data = load_text_data()
-
-    st.title("Named Entity Recognition example")
-
-    if st.button("Pick random!") :
-        random_index = random.randint(0, len(data)-1)
+    text = load_text_data()
     
-    text = data[random_index]
     doc = nlp(text)
 
-    default_visualizer, custom_visualizer = st.tabs([
+    default_visualizer, custom_visualizer, raw_text = st.tabs([
         "Default NER visualizer",
-        "Custom NER visualizer"
+        "Custom NER visualizer",
+        'Raw text'
     ])
 
     with default_visualizer:
@@ -50,7 +50,12 @@ def main():
 
     with custom_visualizer:
         html = displacy.render([doc], style='ent')
-        html = re.sub("\s{2,}", " ", html)
+        # html = re.sub("\s{2,}", " ", html)
+        html = re.sub('\n', ' ', html)
+        st.markdown(html, unsafe_allow_html=True)
+
+    with raw_text:
+        st.text_area('Text:',text)
 
 
 
