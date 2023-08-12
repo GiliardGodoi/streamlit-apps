@@ -4,7 +4,8 @@ import sklearn as sk
 import spacy
 import spacy_streamlit
 import streamlit as st
-
+import re
+from spacy import displacy
 from spacy_streamlit import load_model
 from spacy_streamlit import visualize_ner
 
@@ -28,7 +29,7 @@ def load_text_data(dataset_name : str):
 
 
 def main():
-    nlp = load_model('en-core-web-sm')
+    nlp = load_model('en_core_web_sm')
     data = load_text_data()
 
     st.title("Named Entity Recognition example")
@@ -48,7 +49,9 @@ def main():
         visualize_ner(doc, labels=nlp.get_pipe("ner").labels, show_table=False)
 
     with custom_visualizer:
-        st.write("Not yet implemented!")
+        html = displacy.render([doc], style='ent')
+        html = re.sub("\s{2,}", " ", html)
+
 
 
 
