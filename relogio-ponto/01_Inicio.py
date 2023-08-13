@@ -149,17 +149,17 @@ def main():
             
             st.dataframe(df_ponto, use_container_width=True)
 
-            st.download_button(":inbox_tray: Download", 
-                            data=to_excel(df_ponto), 
-                            file_name='output.xlsx'
-                            )
-            # st.download_button(
-            #     "Download",
-            #     df_ponto.to_csv(),
-            #     "file.csv",
-            #     "text/csv",
-            #     key='download-csv'
-            # )
+            # st.download_button(":inbox_tray: Download", 
+            #                 data=to_excel(df_ponto), 
+            #                 file_name='output.xlsx'
+            #                 )
+            st.download_button(
+                ":inbox_tray: Download",
+                df_ponto.to_csv(),
+                "output.csv",
+                "text/csv",
+                key='download-csv'
+            )
 
 
 if __name__ == "__main__":
