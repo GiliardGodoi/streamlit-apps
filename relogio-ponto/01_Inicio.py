@@ -63,7 +63,7 @@ def to_excel(df):
     '''
     output = BytesIO()
     # writer = pd.ExcelWriter(output, engine='openpyxl') # xlsxwriter
-    writer = pd.ExcelWriter(output, engine='xlswriter') 
+    writer = pd.ExcelWriter(output, engine='xlsxwriter') 
     df.to_excel(writer, index=True, sheet_name='Plan1')
     # workbook = writer.book
     # worksheet = writer.sheets['Sheet1']
