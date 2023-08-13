@@ -62,7 +62,8 @@ def to_excel(df):
     See the discussion on <https://stackoverflow.com/questions/67564627/how-to-download-excel-file-in-python-and-streamlit>
     '''
     output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='openpyxl') # xlsxwriter
+    # writer = pd.ExcelWriter(output, engine='openpyxl') # xlsxwriter
+    writer = pd.ExcelWriter(output, engine='xlswriter') 
     df.to_excel(writer, index=True, sheet_name='Plan1')
     # workbook = writer.book
     # worksheet = writer.sheets['Sheet1']
