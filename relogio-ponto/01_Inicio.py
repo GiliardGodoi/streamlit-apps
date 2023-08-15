@@ -25,18 +25,18 @@ def analisar_arquivo(uploaded_file):
         'name'
     ]
     numeric_attribs = [
-        'sequential_number', 
-        'cod_op', 
-        'day', 
-        'month', 
-        'year', 
-        'hour', 
-        'minutes' 
+        'sequential_number',
+        'cod_op',
+        'day',
+        'month',
+        'year',
+        'hour',
+        'minutes'
     ]
     date_attribs = [ 'year', 'month', 'day', 'hour', 'minutes']
-    
+
     opened_file = StringIO(uploaded_file.getvalue().decode("ISO8859-1"))
-    
+
     for line in opened_file:
         match = pattern.fullmatch(line)
         if match:
