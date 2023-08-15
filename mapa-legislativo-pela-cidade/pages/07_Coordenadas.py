@@ -11,18 +11,25 @@ st.set_page_config(layout="wide")
 def load_data():
     return None
 
+if 'places' not in st.session_state:
+    st.session_state['places'] = list()
 
 def main():
-    
-    st.header("Coordenadas")
-        
+
+    st.header("Pesquisar coordenadas")
+
     CENTER_START = [-23.29, -50.07]
     # tiles="cartodb positron"
     # tiles="Stamen Toner"
     map = folium.Map(location=CENTER_START, zoom_start=14)
-    # Draw(export=True).add_to(map)
+    draw = Draw(
+        export=True,
+        draw_options={'polyline' : False, 'polygon': False, 'rectangle' : False,
+                      'circle' : False, 'circlemarker' : False, 'marker' : True}
+    )
+    draw.add_to(map)
     col1, col2 = st.columns([0.7, 0.3], gap='small')
-    
+
     with col1 :
         output = st_folium(
                 map,
@@ -30,29 +37,34 @@ def main():
                 key='mapa-coordenadas',
                 width=900,
                 height=600,
-                returned_objects=['last_clicked']
-            )  
-    if output is not None \
-        and 'last_clicked' in output \
-        and output['last_clicked'] is not None :
-        lat = output['last_clicked']['lat']
-        lng = output['last_clicked']['lng']
-    else :
-        lat = 0
-        lng = 0
+                returned_objects=['last_clicked', 'all_drawings']
+            )
+    is_available = (output is not None) \
+            and ('all_drawings' in output) \
+            and (output['all_drawings'] is not None) \
+            and (len(output['all_drawings']) > 0)
     with col2:
-        A, B = st.columns(2)
-        with A:
-            st.text_input("Lat", value=lat)
-        with B:
-            st.text_input("Long", value=lng)
+        if is_available:
+            drawings = [d['geometry'] for d in output['all_drawings']]
+            st.write("Pontos selecionados")
+            df = pd.DataFrame(drawings)
+            st.dataframe(df, use_container_width=True, height=500, )
 
-        submit = st.button('Procurar')
-        if submit:
-            url = f"https://geocode.maps.co/reverse?lat={lat}&lon={lng}"
-            response = requests.get(url)
-            st.write(response.json())
+    submit = st.button("Procurar", disabled=(not is_available))
+    if submit and is_available:
+        st.session_state['places'] = list()
+        geometries = [d['geometry'] for d in output['all_drawings']]
+        with st.spinner("Pesquisando..."):
+            for geometry in geometries:
+                lng, lat = geometry['coordinates']
+                url = f"https://geocode.maps.co/reverse?lat={lat}&lon={lng}"
+                print(url)
+                response = requests.get(url)
+                st.session_state['places'].append(response.json())
+
+    if st.session_state['places'] :
+        st.write(st.session_state['places'])
+
 
 if __name__ == "__main__":
     main()
-
