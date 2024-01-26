@@ -5,6 +5,7 @@ numpy
 pandas
 requests
 matplotlib
+python-docx
 seaborn
 streamlit
 scikit-learn
