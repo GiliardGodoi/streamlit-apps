@@ -92,13 +92,15 @@ def save_to_docx(contents, save_path):
     for content in contents:
         doc.add_page_break()
         p = doc.add_paragraph()
-        doc.add_picture(content['image'], width=Inches(10.0))
+        doc.add_picture(content['image'], width=Inches(11.0))
         p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-        paragraph = doc.add_paragraph(content['link'])
+        paragraph = doc.add_paragraph()
         run = paragraph.add_run()
+        run.add_text(content['link'])
         font = run.font
         font.size = Pt(9)
         font.name = 'Arial'
+
         # print(section.orientation, section.page_width, section.page_height)
     doc.save(save_path)
 
@@ -109,13 +111,12 @@ def main():
     links = ui_input_text_links(st.session_state['k_links'])
 
     if st.button("Câmera, ação...", use_container_width=True) and len(links) > 0:
-        with st.spinner("Olhe o outro navegador..."):
-            values = capture_screenshot(links)
-            docx = Path('relatorio.docx')
-            if values is not None: save_to_docx(values, str(docx))
-            if docx.exists():
-                with open(docx, 'rb') as f:
-                    st.download_button("Download", f, file_name='relatorio.docx')
+        values = capture_screenshot(links)
+        docx = Path('relatorio.docx')
+        if values is not None: save_to_docx(values, str(docx))
+        if docx.exists():
+            with open(docx, 'rb') as f:
+                st.download_button("Download", f, file_name='relatorio.docx')
 
 
 
