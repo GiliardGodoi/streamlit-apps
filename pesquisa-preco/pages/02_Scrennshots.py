@@ -55,12 +55,12 @@ def ui_input_text_links(k, pattern=STRING_PATTERN_LINKS):
 
     container = st.container()
 
-    col1, _, _ = st.columns([0.2, 0.2, 0.6])
+    col1, col2, _ = st.columns([0.2, 0.2, 0.6])
 
     nro = col1.number_input(
         "Número de links para analisar",
         min_value=1,
-        max_value=10,
+        max_value=15,
         value=2,
         step=1,
         label_visibility="collapsed",
@@ -72,6 +72,15 @@ def ui_input_text_links(k, pattern=STRING_PATTERN_LINKS):
 
     links = [st.session_state[f'link_{i}'] for i in range(k) ]
     matches = [ re.search(pattern, link) for link in  links ]
+
+    with  col2:
+        st.download_button(
+            label="salvar links",
+            data="\n".join(str(l) for l in links),
+            file_name='links.txt',
+            mime='txt/csv',
+            disabled=not bool(len(links))
+            )
 
     links = [{
         'seq' : i,
@@ -106,7 +115,7 @@ def save_to_docx(contents, save_path):
 
 
 def main():
-    st.header("Salvar screenshots")
+    st.header("Screenshoter!")
 
     links = ui_input_text_links(st.session_state['k_links'])
 
